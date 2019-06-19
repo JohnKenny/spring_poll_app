@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.apress.domain.Poll;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
+import java.util.Optional;
 /*
  * Provides end-points to access and modify Poll/s resources.
  */
@@ -47,5 +48,28 @@ public class PollController
 		
 		return new ResponseEntity<>(null, HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(value="/polls/{pollId}", method=RequestMethod.GET)
+	public ResponseEntity<?> getPoll(@PathVariable Long pollId)
+	{
+		Poll p = pollRepository.getOne(pollId);
+		return new ResponseEntity<> (p, HttpStatus.OK);			
+	}
+	
+	@RequestMapping(value="/polls/{pollId}", method=RequestMethod.PUT)
+	public ResponseEntity<?> updatePoll(@RequestBody Poll poll, @PathVariable Long pollId)
+	{
+				// saves entity
+				Poll p = pollRepository.save(poll);
+				return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/polls/{pollId}", method=RequestMethod.DELETE)
+	public ResponseEntity<?> deletePoll(@PathVariable Long pollId)
+	{
+		pollRepository.deleteById(pollId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 	
 }
